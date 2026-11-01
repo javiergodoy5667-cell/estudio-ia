@@ -1,0 +1,5 @@
+# Nada de archivos que no van al sitio
+.DS_Store
+Thumbs.db
+*.log
+_pruebas/

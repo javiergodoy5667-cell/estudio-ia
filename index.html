@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Estudio</title>
+<meta name="description" content="Estudio: creá imágenes con tu generador.">
+<meta name="theme-color" content="#0E0E10">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./iconos/icono-192.png" type="image/png">
+<link rel="apple-touch-icon" href="./iconos/icono-192.png">
+<link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+<div class="app">
+
+  <header class="cabecera">
+    <h1>Estudio</h1>
+    <button type="button" class="estado" id="estado" aria-live="polite">
+      <span class="punto" id="punto"></span>
+      <span id="estadoTexto">Generador apagado</span>
+    </button>
+  </header>
+
+  <main class="contenido" id="contenido">
+
+    <!-- ================= CREAR ================= -->
+    <section class="pantalla activa" id="pantalla-crear" aria-label="Crear">
+      <nav class="modos" id="modos" aria-label="Tipo de creación"></nav>
+
+      <section class="tarjeta idea">
+        <label for="idea" id="pregunta">¿Qué imagen querés?</label>
+        <textarea id="idea" rows="3" placeholder="Un astronauta tomando café en una terraza, atardecer" autocomplete="off"></textarea>
+        <div class="fila-idea">
+          <button type="button" class="boton-foto" id="fotoRef" aria-label="Agregar foto de referencia">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"></rect><circle cx="9" cy="11" r="2"></circle><path d="M21 16l-5-5-8 8"></path></svg>
+          </button>
+          <div class="formatos" id="formatos" role="group" aria-label="Formato"></div>
+        </div>
+      </section>
+
+      <button type="button" class="principal" id="crear" disabled>
+        <span>Crear</span>
+        <span class="tiempo" id="tiempo">≈ 40 s</span>
+      </button>
+
+      <section class="progreso" id="progreso" hidden aria-live="polite">
+        <div class="barra"><i id="barraRelleno"></i></div>
+        <div class="progreso-texto">
+          <span id="progresoTexto">Preparando…</span>
+          <button type="button" class="boton-suave chico" id="cancelar">Cancelar</button>
+        </div>
+      </section>
+
+      <section class="resultado" id="resultado" hidden>
+        <div class="marco-imagen">
+          <img id="resultadoImagen" alt="Imagen creada">
+        </div>
+        <div class="acciones">
+          <button type="button" class="boton-suave" id="bajar">Bajar</button>
+          <button type="button" class="boton-suave" id="otra">Otra igual</button>
+        </div>
+        <p class="guardado" id="guardado">Guardada en tu galería.</p>
+      </section>
+
+      <div class="titulo-seccion">
+        <h2>Lo último</h2>
+        <button type="button" class="enlace" data-ir="galeria">Ver todo</button>
+      </div>
+      <div class="cuadricula" id="ultimas"></div>
+      <p class="vacio" id="vacioUltimas" hidden>Todavía no creaste ninguna imagen.</p>
+    </section>
+
+    <!-- ================= EFECTOS ================= -->
+    <section class="pantalla" id="pantalla-efectos" aria-label="Efectos" hidden>
+      <header class="cabecera-pantalla">
+        <h2>Efectos</h2>
+        <p>Elegí cómo se mueve la cámara. Tu foto se vuelve video.</p>
+      </header>
+
+      <div class="pildoras" aria-hidden="true">
+        <span class="pildora activa">Cámara</span>
+        <span class="pildora">Acción</span>
+        <span class="pildora">Producto</span>
+        <span class="pildora">Luz</span>
+      </div>
+
+      <div class="cuadricula efectos" id="listaEfectos"></div>
+
+      <button type="button" class="principal apagado" id="usarEfecto" disabled>Llega en la próxima fase</button>
+    </section>
+
+    <!-- ================= PLANTILLAS ================= -->
+    <section class="pantalla" id="pantalla-plantillas" aria-label="Plantillas" hidden>
+      <header class="cabecera-pantalla">
+        <h2>Plantillas</h2>
+        <p>Recetas listas. Subís tu foto o escribís una idea y sale.</p>
+      </header>
+
+      <div class="cuadricula plantillas" id="listaPlantillas"></div>
+
+      <button type="button" class="boton-guardar" disabled>+ Guardar mi propia plantilla</button>
+      <p class="vacio">Llega en la próxima fase.</p>
+    </section>
+
+    <!-- ================= GALERÍA ================= -->
+    <section class="pantalla" id="pantalla-galeria" aria-label="Galería" hidden>
+      <header class="cabecera-pantalla">
+        <h2>Galería</h2>
+        <p>Tus imágenes quedan acá, aunque apagues el generador.</p>
+      </header>
+
+      <div class="cuadricula galeria" id="galeria"></div>
+      <p class="vacio" id="vacioGaleria">Todavía no hay imágenes. Creá la primera.</p>
+    </section>
+
+  </main>
+
+  <nav class="menu" aria-label="Principal">
+    <button type="button" class="menu-item activo" data-ir="crear">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>
+      Crear
+    </button>
+    <button type="button" class="menu-item" data-ir="efectos">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="3" y="6" width="13" height="12" rx="2"></rect><path d="M16 10l5-3v10l-5-3"></path></svg>
+      Efectos
+    </button>
+    <button type="button" class="menu-item" data-ir="galeria">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1.5"></rect><rect x="13" y="4" width="7" height="7" rx="1.5"></rect><rect x="4" y="13" width="7" height="7" rx="1.5"></rect><rect x="13" y="13" width="7" height="7" rx="1.5"></rect></svg>
+      Galería
+    </button>
+    <button type="button" class="menu-item" data-ir="plantillas">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M5 4h14v16H5z"></path><path d="M9 9h6M9 13h6"></path></svg>
+      Plantillas
+    </button>
+  </nav>
+</div>
+
+<!-- ================= HOJA: CONECTAR ================= -->
+<div class="capa" id="capaConectar" hidden>
+  <div class="hoja" role="dialog" aria-modal="true" aria-labelledby="tituloConectar">
+    <h2 id="tituloConectar">Conectar generador</h2>
+    <p class="nota">Prendé tu cuaderno en Kaggle, copiá el link que sale al final y pegalo acá.</p>
+    <label for="link">Link del generador</label>
+    <input id="link" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://algo.trycloudflare.com">
+    <p class="error" id="errorLink" hidden></p>
+    <div class="hoja-botones">
+      <button type="button" class="boton-suave" id="cerrarConectar">Cerrar</button>
+      <button type="button" class="principal chico" id="guardarLink">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="./app.js"></script>
+</body>
+</html>
