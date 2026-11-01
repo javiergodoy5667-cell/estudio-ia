@@ -5,7 +5,7 @@ export const CONFIG = {
   claveLink: "estudio.link",
 
   // Versión del caché: subir el número en CADA cambio publicado
-  versionCache: "estudio-v1",
+  versionCache: "estudio-v2",
 
   // Modelo por defecto (se busca en la lista del generador; si no está, se usa el primero)
   modeloPreferido: "RealVisXL",
@@ -42,3 +42,4 @@ export const CONFIG = {
   // Aviso de "esto tarda demasiado"
   avisoLento: 240000,
 };
+

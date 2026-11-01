@@ -75,11 +75,17 @@ function recordarLink(link) {
   guardadoLocal.set(CONFIG.claveLink, link);
 }
 
+// Muestra el problema dentro de la hoja de conectar (nunca con ventanas del navegador).
+function avisarLink(mensaje) {
+  abrirHoja();
+  $("#errorLink").textContent = mensaje;
+  $("#errorLink").hidden = false;
+}
+
 async function conectar(link) {
   const limpio = Generador.limpiarLink(link);
   if (!limpio) {
-    $("#errorLink").textContent = "Ese link no se entiende. Copialo otra vez del cuaderno.";
-    $("#errorLink").hidden = false;
+    avisarLink("Ese link no se entiende. Copialo otra vez del cuaderno.");
     return false;
   }
   generador.usar(limpio);
@@ -87,10 +93,9 @@ async function conectar(link) {
   $("#estadoTexto").textContent = "Revisando…";
   const vive = await generador.saludar(limpio);
   if (!vive) {
-    $("#errorLink").textContent = "No respondió. Revisá que el cuaderno esté prendido y que el link sea el de recién.";
-    $("#errorLink").hidden = false;
     estado.listo = false;
     pintarEstado();
+    avisarLink("No respondió. Revisá que el cuaderno esté prendido y que el link sea el de recién.");
     return false;
   }
   recordarLink(limpio);

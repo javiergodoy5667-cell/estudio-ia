@@ -1,5 +1,5 @@
-﻿# Baja las tipografÃ­as de la maqueta (Bricolage Grotesque e Inter) y las deja
-# dentro de la app, para que el diseÃ±o se vea igual y funcione sin internet.
+# Baja las tipografías de la maqueta (Bricolage Grotesque e Inter) y las deja
+# dentro de la app, para que el diseño se vea igual y funcione sin internet.
 import os
 import re
 import urllib.request
@@ -8,8 +8,6 @@ CSS = "https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36"
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
-DESTINO = AQUI
-os.makedirs(DESTINO, exist_ok=True)
 
 pedido = urllib.request.Request(CSS, headers={"User-Agent": UA})
 css = urllib.request.urlopen(pedido, timeout=30).read().decode()
@@ -29,9 +27,8 @@ print("Encontrados:", ", ".join(latinos))
 
 for familia, url in latinos.items():
     nombre = familia.lower().replace(" ", "-") + ".woff2"
-    ruta = os.path.join(DESTINO, nombre)
+    ruta = os.path.join(AQUI, nombre)
     datos = urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": UA}), timeout=60).read()
     with open(ruta, "wb") as f:
         f.write(datos)
-    print(f"Guardado {nombre}: {len(datos)} bytes")
-
+    print("Guardado %s: %d bytes" % (nombre, len(datos)))

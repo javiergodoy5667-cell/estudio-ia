@@ -1,6 +1,6 @@
 // Guarda la app para que abra sin internet. Nunca guarda nada del generador.
 
-const VERSION = "estudio-v1"; // subir el número en CADA cambio publicado
+const VERSION = "estudio-v2"; // subir el número en CADA cambio publicado
 const CACHE = VERSION + "-shell";
 
 const ARCHIVOS = [
@@ -40,7 +40,7 @@ self.addEventListener("activate", (e) => {
 
 // Lo del generador no se toca nunca.
 function esDelGenerador(url) {
-  return url.hostname.endsWith("trycloudflare.com") || url.port === "8188" || url.port === "8189" || url.port === "8190";
+  return url.hostname.endsWith("trycloudflare.com") || ["8188", "8189", "8190", "8191", "8192"].includes(url.port);
 }
 
 self.addEventListener("fetch", (e) => {
@@ -50,13 +50,19 @@ self.addEventListener("fetch", (e) => {
   const url = new URL(pedido.url);
   if (url.origin !== self.location.origin) {
     if (esDelGenerador(url)) return; // ni se guarda ni se sirve del caché
-    // Lo de afuera (letras de Google): primero el caché, si no hay, la red
+    // Lo de afuera: primero el caché, si no hay, la red
     e.respondWith(
-      caches.match(pedido).then((guardado) => guardado || fetch(pedido).then((r) => {
-        const copia = r.clone();
-        caches.open(CACHE).then((c) => c.put(pedido, copia)).catch(() => {});
-        return r;
-      }).catch(() => Response.error()))
+      caches.match(pedido).then(
+        (guardado) =>
+          guardado ||
+          fetch(pedido)
+            .then((r) => {
+              const copia = r.clone();
+              caches.open(CACHE).then((c) => c.put(pedido, copia)).catch(() => {});
+              return r;
+            })
+            .catch(() => Response.error())
+      )
     );
     return;
   }
@@ -65,11 +71,15 @@ self.addEventListener("fetch", (e) => {
   if (esImagen) {
     // Íconos: primero el caché
     e.respondWith(
-      caches.match(pedido).then((guardado) => guardado || fetch(pedido).then((r) => {
-        const copia = r.clone();
-        caches.open(CACHE).then((c) => c.put(pedido, copia)).catch(() => {});
-        return r;
-      }))
+      caches.match(pedido).then(
+        (guardado) =>
+          guardado ||
+          fetch(pedido).then((r) => {
+            const copia = r.clone();
+            caches.open(CACHE).then((c) => c.put(pedido, copia)).catch(() => {});
+            return r;
+          })
+      )
     );
     return;
   }
