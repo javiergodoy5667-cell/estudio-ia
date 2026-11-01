@@ -14,16 +14,17 @@ export function perfilDe(nombreArchivo) {
 }
 
 const PERFILES = {
-  lustify: { pasos: 30, cfg: 4, sampler: "dpmpp_2m_sde", sched: "karras", pre: "" },
-  realvis: { pasos: 30, cfg: 5, sampler: "dpmpp_2m_sde", sched: "karras", pre: "" },
+  lustify: { neg: "lowres, worst quality, low quality, blurry, deformed, bad anatomy, bad hands, extra fingers, watermark, text, cartoon, 3d, illustration", pasos: 30, cfg: 4, sampler: "dpmpp_2m_sde", sched: "karras", pre: "" },
+  realvis: { neg: "lowres, worst quality, low quality, blurry, deformed, bad anatomy, bad hands, extra fingers, watermark, text, cartoon, 3d, painting, illustration", pasos: 30, cfg: 5, sampler: "dpmpp_2m_sde", sched: "karras", pre: "" },
   noob: {
+    neg: "worst quality, low quality, lowres, bad anatomy, bad hands, extra digits, fewer digits, watermark, signature, old, early, jpeg artifacts",
     pasos: 28,
     cfg: 5,
     sampler: "euler_ancestral",
     sched: "normal",
     pre: "masterpiece, best quality, newest, absurdres, highres, ",
   },
-  pony: { pasos: 28, cfg: 7, sampler: "euler_ancestral", sched: "normal", saltoClip: -2, pre: "score_9, score_8_up, score_7_up, " },
+  pony: { neg: "score_4, score_5, score_6, worst quality, low quality, bad anatomy, bad hands, watermark", pasos: 28, cfg: 7, sampler: "euler_ancestral", sched: "normal", saltoClip: -2, pre: "score_9, score_8_up, score_7_up, " },
   sdxl: { pasos: CONFIG.pasos, cfg: CONFIG.cfg, sampler: CONFIG.sampler, sched: CONFIG.programador, pre: "" },
 };
 
@@ -53,7 +54,7 @@ export function flujoImagen({ modelo, idea, ancho, alto, semilla, formato }) {
     9: { class_type: "VAELoader", inputs: { vae_name: "sdxl_vae_fp16_fix.safetensors" } },
     4: { class_type: "EmptyLatentImage", inputs: { width: ancho, height: alto, batch_size: 1 } },
     2: { class_type: "CLIPTextEncode", inputs: { text: texto, clip: ["1", 1] } },
-    3: { class_type: "CLIPTextEncode", inputs: { text: CONFIG.negativo, clip: ["1", 1] } },
+    3: { class_type: "CLIPTextEncode", inputs: { text: perfil.neg || CONFIG.negativo, clip: ["1", 1] } },
     5: {
       class_type: "KSampler",
       inputs: {

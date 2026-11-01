@@ -1,6 +1,6 @@
 // Guarda la app para que abra sin internet. Nunca guarda nada del generador.
 
-const VERSION = "estudio-v2"; // subir el número en CADA cambio publicado
+const VERSION = "estudio-v3"; // subir el número en CADA cambio publicado
 const CACHE = VERSION + "-shell";
 
 const ARCHIVOS = [
